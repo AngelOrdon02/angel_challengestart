@@ -1,0 +1,28 @@
+{
+  "name": "angel_challengestart",
+  "version": "1.0.0",
+  "description": "Challenge Start | API para Mocks de Servicios REST | Angel Geovanny Ordón Colchaj",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngelOrdon02/angel_challengestart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AngelOrdon02/angel_challengestart/issues"
+  },
+  "homepage": "https://github.com/AngelOrdon02/angel_challengestart#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "joi": "^17.13.3",
+    "uuid": "^11.1.0"
+  }
+}
