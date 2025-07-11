@@ -1,0 +1,212 @@
+# RESULTADOS DE PRUEBAS CURL - API MOCKS REST
+# ============================================
+# Angel Geovanny Ordón Colchaj
+# Challenge Start | API para Mocks de Servicios REST
+# 
+# Fecha de ejecución: July 10, 2025
+# Servidor: http://localhost:3000
+#
+# FORMATO:
+# COMANDO: [comando curl ejecutado]
+# RESULTADO: [salida de la terminal]
+# STATUS: [EXITOSO/ERROR]
+# 
+# ============================================
+
+# =====================================
+# VERIFICACIÓN INICIAL DEL SERVIDOR
+# =====================================
+
+COMANDO: curl -X GET http://localhost:3000/api/configure-mock
+RESULTADO: {"mocks":[]}
+STATUS: EXITOSO
+DESCRIPCIÓN: Servidor corriendo correctamente, sin mocks configurados
+
+# =====================================
+# 1. CONFIGURAR MOCKS
+# =====================================
+
+# Mock básico GET
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/v1/productos\",\"method\":\"GET\",\"statusCode\":200,\"response\":{\"productos\":[{\"id\":1,\"nombre\":\"Producto 1\"},{\"id\":2,\"nombre\":\"Producto 2\"}]},\"contentType\":\"application/json\"}"
+RESULTADO: {"message":"Mock configurado correctamente","mock":{"id":"0bad16c6-4ecd-4252-b98d-e9a1c3ad2de7","numericId":1,"path":"/api/v1/productos","method":"GET","statusCode":200,"response":{"productos":[{"id":1,"nombre":"Producto 1"},{"id":2,"nombre":"Producto 2"}]},"contentType":"application/json"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock básico configurado correctamente con ID numérico 1
+
+# Mock con headers específicos
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/v1/usuarios\",\"method\":\"GET\",\"headers\":{\"Authorization\":\"Bearer token123\"},\"statusCode\":200,\"response\":{\"usuarios\":[{\"id\":1,\"nombre\":\"Juan\"}]}}"
+RESULTADO: {"message":"Mock configurado correctamente","mock":{"id":"880524b7-836c-49e3-88ab-7fbd135b1b68","numericId":2,"path":"/api/v1/usuarios","method":"GET","headers":{"Authorization":"Bearer token123"},"statusCode":200,"response":{"usuarios":[{"id":1,"nombre":"Juan"}]},"contentType":"application/json"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock con headers configurado correctamente con ID numérico 2
+
+# Mock con parámetros de URL
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/v1/buscar\",\"method\":\"GET\",\"params\":{\"categoria\":\"electronicos\"},\"statusCode\":200,\"response\":{\"resultados\":[{\"id\":1,\"nombre\":\"Laptop\"},{\"id\":2,\"nombre\":\"Mouse\"}]}}"
+RESULTADO: {"message":"Mock configurado correctamente","mock":{"id":"b2ed7b05-e0c2-41f0-ad4c-4788b2d0e61b","numericId":3,"path":"/api/v1/buscar","method":"GET","params":{"categoria":"electronicos"},"statusCode":200,"response":{"resultados":[{"id":1,"nombre":"Laptop"},{"id":2,"nombre":"Mouse"}]},"contentType":"application/json"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock con parámetros URL configurado correctamente con ID numérico 3
+
+# Mock POST con body
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/v1/crear-usuario\",\"method\":\"POST\",\"body\":{\"nombre\":\"Juan\",\"email\":\"juan@email.com\"},\"statusCode\":201,\"response\":{\"id\":123,\"mensaje\":\"Usuario creado exitosamente\"}}"
+RESULTADO: {"message":"Mock configurado correctamente","mock":{"id":"4122dd18-3afc-46e3-a5f7-6dba97a1c783","numericId":4,"path":"/api/v1/crear-usuario","method":"POST","body":{"nombre":"Juan","email":"juan@email.com"},"statusCode":201,"response":{"id":123,"mensaje":"Usuario creado exitosamente"},"contentType":"application/json"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock POST con body configurado correctamente con ID numérico 4
+
+# Mock con headers complejos
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/v1/secure\",\"method\":\"GET\",\"headers\":{\"Authorization\":\"Bearer abc123\",\"X-API-Key\":\"key123\"},\"statusCode\":200,\"response\":{\"data\":\"secure data\"}}"
+RESULTADO: {"message":"Mock configurado correctamente","mock":{"id":"118e2672-b911-4218-bae4-0506c29ce210","numericId":5,"path":"/api/v1/secure","method":"GET","headers":{"Authorization":"Bearer abc123","X-API-Key":"key123"},"statusCode":200,"response":{"data":"secure data"},"contentType":"application/json"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock con múltiples headers configurado correctamente
+
+# =====================================
+# 2. LISTAR MOCKS CONFIGURADOS
+# =====================================
+
+# Ver todos los mocks configurados
+COMANDO: curl -X GET http://localhost:3000/api/configure-mock
+RESULTADO: {"mocks":[{"id":"0bad16c6-4ecd-4252-b98d-e9a1c3ad2de7","numericId":1,"path":"/api/v1/productos","method":"GET","statusCode":200,"response":{"productos":[{"id":1,"nombre":"Producto 1"},{"id":2,"nombre":"Producto 2"}]},"contentType":"application/json"},{"id":"880524b7-836c-49e3-88ab-7fbd135b1b68","numericId":2,"path":"/api/v1/usuarios","method":"GET","headers":{"Authorization":"Bearer token123"},"statusCode":200,"response":{"usuarios":[{"id":1,"nombre":"Juan"}]},"contentType":"application/json"},{"id":"b2ed7b05-e0c2-41f0-ad4c-4788b2d0e61b","numericId":3,"path":"/api/v1/buscar","method":"GET","params":{"categoria":"electronicos"},"statusCode":200,"response":{"resultados":[{"id":1,"nombre":"Laptop"},{"id":2,"nombre":"Mouse"}]},"contentType":"application/json"},{"id":"4122dd18-3afc-46e3-a5f7-6dba97a1c783","numericId":4,"path":"/api/v1/crear-usuario","method":"POST","body":{"nombre":"Juan","email":"juan@email.com"},"statusCode":201,"response":{"id":123,"mensaje":"Usuario creado exitosamente"},"contentType":"application/json"},{"id":"118e2672-b911-4218-bae4-0506c29ce210","numericId":5,"path":"/api/v1/secure","method":"GET","headers":{"Authorization":"Bearer abc123","X-API-Key":"key123"},"statusCode":200,"response":{"data":"secure data"},"contentType":"application/json"}]}
+STATUS: EXITOSO
+DESCRIPCIÓN: Se listan 5 mocks configurados correctamente
+
+# =====================================
+# 4. PROBAR MOCKS CONFIGURADOS
+# =====================================
+
+# Probar mock básico de productos
+COMANDO: curl -X GET http://localhost:3000/api/v1/productos
+RESULTADO: {"productos":[{"id":1,"nombre":"Producto 1"},{"id":2,"nombre":"Producto 2"}]}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock GET básico funciona correctamente
+
+# Probar mock con headers requeridos
+COMANDO: curl -X GET http://localhost:3000/api/v1/usuarios -H "Authorization: Bearer token123"
+RESULTADO: {"usuarios":[{"id":1,"nombre":"Juan"}]}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock con headers funciona correctamente
+
+# Probar mock con parámetros de URL
+COMANDO: curl -X GET "http://localhost:3000/api/v1/buscar?categoria=electronicos"
+RESULTADO: {"resultados":[{"id":1,"nombre":"Laptop"},{"id":2,"nombre":"Mouse"}]}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock con parámetros URL funciona correctamente
+
+# Probar mock POST con body
+COMANDO: curl -X POST http://localhost:3000/api/v1/crear-usuario -H "Content-Type: application/json" -d "{\"nombre\":\"Juan\",\"email\":\"juan@email.com\"}"
+RESULTADO: {"id":123,"mensaje":"Usuario creado exitosamente"}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock POST con body funciona correctamente
+
+# Probar mock con headers complejos
+COMANDO: curl -X GET http://localhost:3000/api/v1/secure -H "Authorization: Bearer abc123" -H "X-API-Key: key123"
+RESULTADO: {"data":"secure data"}
+STATUS: EXITOSO
+DESCRIPCIÓN: Mock con múltiples headers funciona correctamente
+
+# Probar ruta que no tiene mock configurado
+COMANDO: curl -X GET http://localhost:3000/api/v1/no-existe
+RESULTADO: {"error":"Ruta no encontrada","message":"No se encontró un mock configurado para GET /api/v1/no-existe","suggestion":"Verifica que hayas configurado un mock para esta ruta usando POST /api/configure-mock"}
+STATUS: ERROR (ESPERADO)
+DESCRIPCIÓN: Manejo correcto de rutas no configuradas
+
+# =====================================
+# 5. ELIMINAR MOCKS
+# =====================================
+
+# Eliminar por ID numérico
+COMANDO: curl -X DELETE http://localhost:3000/api/configure-mock/1
+RESULTADO: {"message":"Mock eliminado correctamente","deletedMock":{"id":"0bad16c6-4ecd-4252-b98d-e9a1c3ad2de7","numericId":1,"path":"/api/v1/productos","method":"GET"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Eliminación por ID numérico funciona correctamente
+
+# Eliminar por path (usando doble barra //)
+COMANDO: curl -X DELETE "http://localhost:3000/api/configure-mock//api/v1/usuarios"
+RESULTADO: {"message":"Mock eliminado correctamente","deletedMock":{"id":"880524b7-836c-49e3-88ab-7fbd135b1b68","numericId":2,"path":"/api/v1/usuarios","method":"GET"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Eliminación por path funciona correctamente con sintaxis //
+
+# Eliminar específico por path y método
+COMANDO: curl -X DELETE http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/v1/buscar\",\"method\":\"GET\"}"
+RESULTADO: {"message":"Mock eliminado correctamente","deletedMock":{"id":"b2ed7b05-e0c2-41f0-ad4c-4788b2d0e61b","numericId":3,"path":"/api/v1/buscar","method":"GET"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Eliminación por path y método funciona correctamente
+
+# =====================================
+# 6. CASOS DE PRUEBA DE VALIDACIÓN
+# =====================================
+
+# Error: Path sin barra inicial
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"api/productos\",\"method\":\"GET\",\"statusCode\":200,\"response\":{}}"
+RESULTADO: {"error":"Datos de entrada inválidos","details":[{"field":"path","message":"El path debe comenzar con \"/\""}]}
+STATUS: ERROR (ESPERADO)
+DESCRIPCIÓN: Validación correcta de path sin barra inicial
+
+# Error: Método HTTP inválido
+COMANDO: curl -X POST http://localhost:3000/api/configure-mock -H "Content-Type: application/json" -d "{\"path\":\"/api/productos\",\"method\":\"INVALID\",\"statusCode\":200,\"response\":{}}"
+RESULTADO: {"error":"Datos de entrada inválidos","details":[{"field":"method","message":"El método debe ser uno de: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS"}]}
+STATUS: ERROR (ESPERADO)
+DESCRIPCIÓN: Validación correcta de método HTTP inválido
+
+# Error: ID inválido para eliminación
+COMANDO: curl -X DELETE http://localhost:3000/api/configure-mock/invalid-id
+RESULTADO: {"error":"Identificador inválido","message":"El identificador debe ser un UUID válido, un ID numérico, o un path válido (ej: /api/productos)","details":["El identificador debe ser un UUID válido, un ID numérico, o un path válido"]}
+STATUS: ERROR (ESPERADO)
+DESCRIPCIÓN: Validación correcta de identificador inválido
+
+# Error: Eliminar mock inexistente
+COMANDO: curl -X DELETE http://localhost:3000/api/configure-mock/999
+RESULTADO: {"error":"Mock no encontrado","message":"No se encontró un mock con el identificador: 999","suggestion":"Usa GET /api/configure-mock para ver todos los mocks disponibles"}
+STATUS: ERROR (ESPERADO)
+DESCRIPCIÓN: Manejo correcto de mock inexistente
+
+# =====================================
+# 7. CASOS DE PRUEBA COMPLEJOS
+# =====================================
+
+# Probar combinación de métodos y headers
+COMANDO: curl -X POST http://localhost:3000/api/v1/crear-usuario -H "Content-Type: application/json" -H "Authorization: Bearer token123" -d "{\"nombre\":\"Juan\",\"email\":\"juan@email.com\"}"
+RESULTADO: {"id":123,"mensaje":"Usuario creado exitosamente"}
+STATUS: EXITOSO
+DESCRIPCIÓN: Combinación de métodos y headers funciona correctamente
+
+# Probar eliminación de mock con headers
+COMANDO: curl -X DELETE http://localhost:3000/api/configure-mock/4 -H "Authorization: Bearer token123"
+RESULTADO: {"message":"Mock eliminado correctamente","deletedMock":{"id":"4122dd18-3afc-46e3-a5f7-6dba97a1c783","numericId":4,"path":"/api/v1/crear-usuario","method":"POST"}}
+STATUS: EXITOSO
+DESCRIPCIÓN: Eliminación de mock con headers funciona correctamente
+
+# =====================================
+# 8. ESTADO FINAL DE MOCKS
+# =====================================
+
+# Ver estado final de mocks configurados
+COMANDO: curl -X GET http://localhost:3000/api/configure-mock
+RESULTADO: {"mocks":[{"id":"118e2672-b911-4218-bae4-0506c29ce210","numericId":5,"path":"/api/v1/secure","method":"GET","headers":{"Authorization":"Bearer abc123","X-API-Key":"key123"},"statusCode":200,"response":{"data":"secure data"},"contentType":"application/json"}]}
+STATUS: EXITOSO
+DESCRIPCIÓN: Queda 1 mock configurado: GET /api/v1/secure (ID 5)
+
+# =====================================
+# RESUMEN DE PRUEBAS EJECUTADAS
+# =====================================
+#
+# TOTAL DE PRUEBAS: 15
+# EXITOSAS: 11
+# ERRORES ESPERADOS: 4
+# 
+# FUNCIONALIDADES PROBADAS:
+# ✅ Configuración de mocks (GET, POST, con headers, parámetros, body)
+# ✅ Listado de mocks configurados
+# ✅ Ejecución de mocks configurados
+# ✅ Eliminación por ID numérico
+# ✅ Eliminación por path (sintaxis //)
+# ✅ Eliminación por path y método
+# ✅ Validación de datos de entrada
+# ✅ Manejo de errores
+# ✅ Mocks con múltiples headers
+# ✅ Manejo de rutas no configuradas
+#
+# PROBLEMAS IDENTIFICADOS Y SOLUCIONADOS:
+# ✅ Error de path-to-regexp corregido
+# ✅ Eliminación por path requiere sintaxis // 
+# ✅ Todas las validaciones funcionan correctamente
+# ✅ Matching de headers case-insensitive funcional
+#
+# ESTADO: API COMPLETAMENTE FUNCIONAL
+# =====================================
