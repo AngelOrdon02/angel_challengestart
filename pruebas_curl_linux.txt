@@ -1,0 +1,291 @@
+# PRUEBAS CURL - API MOCKS REST (Linux/bash)
+# =============================================
+# Angel Geovanny Ordón Colchaj
+# Challenge Start | API para Mocks de Servicios REST
+#
+# Instrucciones:
+# 1. Asegúrate de que el servidor esté ejecutándose: npm start
+# 2. Copia y pega los comandos curl en tu terminal bash
+# 3. Los comandos están organizados por secciones
+# 4. Sintaxis adaptada para sistemas Linux/macOS/bash
+#
+# Servidor: http://localhost:3000
+
+# =====================================
+# 1. CONFIGURAR MOCKS
+# =====================================
+
+# Mock básico GET
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/productos","method":"GET","statusCode":200,"response":{"productos":[{"id":1,"nombre":"Producto 1"},{"id":2,"nombre":"Producto 2"}]},"contentType":"application/json"}'
+
+# Mock con headers específicos
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/usuarios","method":"GET","headers":{"Authorization":"Bearer token123"},"statusCode":200,"response":{"usuarios":[{"id":1,"nombre":"Juan"}]}}'
+
+# Mock con parámetros de URL
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/buscar","method":"GET","params":{"categoria":"electronicos"},"statusCode":200,"response":{"resultados":[{"id":1,"nombre":"Laptop"},{"id":2,"nombre":"Mouse"}]}}'
+
+# Mock POST con body
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/crear-usuario","method":"POST","body":{"nombre":"Juan","email":"juan@email.com"},"statusCode":201,"response":{"id":123,"mensaje":"Usuario creado exitosamente"}}'
+
+# Mock PUT para actualizar
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/productos/1","method":"PUT","body":{"nombre":"Producto Actualizado"},"statusCode":200,"response":{"id":1,"nombre":"Producto Actualizado","mensaje":"Producto actualizado"}}'
+
+# Mock DELETE
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/productos/1","method":"DELETE","statusCode":204,"response":""}'
+
+# Mock con respuesta de error
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/error","method":"GET","statusCode":500,"response":{"error":"Error interno del servidor","codigo":"ERR_500"}}'
+
+# Mock con respuesta XML
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/xml-data","method":"GET","statusCode":200,"response":"<?xml version=\"1.0\" encoding=\"UTF-8\"?><productos><producto id=\"1\"><nombre>Producto XML</nombre><precio>100.50</precio></producto></productos>","contentType":"application/xml"}'
+
+# Mock con respuesta 404
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/no-encontrado","method":"GET","statusCode":404,"response":{"error":"Recurso no encontrado","mensaje":"El recurso solicitado no existe"}}'
+
+# Mock con múltiples parámetros
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/reportes","method":"GET","params":{"fecha_inicio":"2024-01-01","fecha_fin":"2024-12-31","tipo":"ventas"},"statusCode":200,"response":{"total_ventas":50000,"periodo":"2024","tipo":"ventas"}}'
+
+# =====================================
+# 2. LISTAR MOCKS CONFIGURADOS
+# =====================================
+
+# Ver todos los mocks configurados
+curl -X GET http://localhost:3000/api/configure-mock
+
+# =====================================
+# 3. ELIMINAR MOCKS
+# =====================================
+
+# Eliminar por ID numérico (más fácil)
+curl -X DELETE http://localhost:3000/api/configure-mock/1
+
+# Eliminar por ID numérico (segundo mock)
+curl -X DELETE http://localhost:3000/api/configure-mock/2
+
+# Eliminar por path (cuando solo hay uno con ese path) - CORREGIDO
+# Nota: Para paths, el path va después de configure-mock/
+curl -X DELETE "http://localhost:3000/api/configure-mock/api/v1/usuarios"
+
+# Eliminar específico por path y método
+curl -X DELETE http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/productos","method":"GET"}'
+
+# Eliminar por UUID (reemplaza con un UUID real de tu respuesta)
+curl -X DELETE http://localhost:3000/api/configure-mock/550e8400-e29b-41d4-a716-446655440000
+
+# =====================================
+# 4. PROBAR MOCKS CONFIGURADOS
+# =====================================
+
+# Probar mock básico de productos
+curl -X GET http://localhost:3000/api/v1/productos
+
+# Probar mock con headers requeridos
+curl -X GET http://localhost:3000/api/v1/usuarios \
+  -H "Authorization: Bearer token123"
+
+# Probar mock con parámetros de URL
+curl -X GET "http://localhost:3000/api/v1/buscar?categoria=electronicos"
+
+# Probar mock POST con body
+curl -X POST http://localhost:3000/api/v1/crear-usuario \
+  -H "Content-Type: application/json" \
+  -d '{"nombre":"Juan","email":"juan@email.com"}'
+
+# Probar mock PUT
+curl -X PUT http://localhost:3000/api/v1/productos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"nombre":"Producto Actualizado"}'
+
+# Probar mock DELETE
+curl -X DELETE http://localhost:3000/api/v1/productos/1
+
+# Probar mock de error
+curl -X GET http://localhost:3000/api/v1/error
+
+# Probar mock XML
+curl -X GET http://localhost:3000/api/v1/xml-data
+
+# Probar mock 404
+curl -X GET http://localhost:3000/api/v1/no-encontrado
+
+# Probar mock con múltiples parámetros
+curl -X GET "http://localhost:3000/api/v1/reportes?fecha_inicio=2024-01-01&fecha_fin=2024-12-31&tipo=ventas"
+
+# =====================================
+# 5. CASOS DE PRUEBA DE VALIDACIÓN
+# =====================================
+
+# Error: Path sin barra inicial
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"api/productos","method":"GET","statusCode":200,"response":{}}'
+
+# Error: Método HTTP inválido
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/productos","method":"INVALID","statusCode":200,"response":{}}'
+
+# Error: Código de estado inválido (muy alto)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/productos","method":"GET","statusCode":999,"response":{}}'
+
+# Error: Código de estado inválido (muy bajo)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/productos","method":"GET","statusCode":50,"response":{}}'
+
+# Error: Falta campo requerido (path)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"method":"GET","statusCode":200,"response":{}}'
+
+# Error: Falta campo requerido (method)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/test","statusCode":200,"response":{}}'
+
+# Error: Falta campo requerido (response)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/test","method":"GET","statusCode":200}'
+
+# Error: Content-Type inválido
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/test","method":"GET","statusCode":200,"response":{},"contentType":"invalid/type"}'
+
+# Error: ID inválido para eliminación
+curl -X DELETE http://localhost:3000/api/configure-mock/invalid-id
+
+# Error: Eliminar mock inexistente
+curl -X DELETE http://localhost:3000/api/configure-mock/999
+
+# =====================================
+# 6. CASOS DE PRUEBA DE DUPLICADOS
+# =====================================
+
+# Configurar un mock
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/test","method":"GET","statusCode":200,"response":{"mensaje":"Test 1"}}'
+
+# Intentar configurar el mismo mock (debería dar error)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/test","method":"GET","statusCode":200,"response":{"mensaje":"Test 2"}}'
+
+# Configurar el mismo path pero diferente método (debería funcionar)
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/test","method":"POST","statusCode":201,"response":{"mensaje":"Test POST"}}'
+
+# =====================================
+# 7. CASOS DE PRUEBA COMPLEJOS
+# =====================================
+
+# Mock con headers complejos
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/secure","method":"GET","headers":{"Authorization":"Bearer abc123","X-API-Key":"key123","User-Agent":"TestApp/1.0"},"statusCode":200,"response":{"data":"secure data"}}'
+
+# Mock con body complejo para POST
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/orders","method":"POST","body":{"customer_id":123,"items":[{"product_id":1,"quantity":2},{"product_id":2,"quantity":1}],"total":150.75},"statusCode":201,"response":{"order_id":456,"status":"created","total":150.75}}'
+
+# Mock con parámetros complejos
+curl -X POST http://localhost:3000/api/configure-mock \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/api/v1/search","method":"GET","params":{"q":"laptop","category":"electronics","min_price":"100","max_price":"1000","sort":"price_asc"},"statusCode":200,"response":{"results":[{"id":1,"name":"Laptop Dell","price":899.99},{"id":2,"name":"Laptop HP","price":799.99}],"total":2}}'
+
+# =====================================
+# 8. PROBAR CASOS COMPLEJOS
+# =====================================
+
+# Probar mock con headers complejos
+curl -X GET http://localhost:3000/api/v1/secure \
+  -H "Authorization: Bearer abc123" \
+  -H "X-API-Key: key123" \
+  -H "User-Agent: TestApp/1.0"
+
+# Probar mock con body complejo
+curl -X POST http://localhost:3000/api/v1/orders \
+  -H "Content-Type: application/json" \
+  -d '{"customer_id":123,"items":[{"product_id":1,"quantity":2},{"product_id":2,"quantity":1}],"total":150.75}'
+
+# Probar mock con parámetros complejos
+curl -X GET "http://localhost:3000/api/v1/search?q=laptop&category=electronics&min_price=100&max_price=1000&sort=price_asc"
+
+# =====================================
+# 9. LIMPIAR TODOS LOS MOCKS
+# =====================================
+
+# Ver todos los mocks antes de limpiar
+curl -X GET http://localhost:3000/api/configure-mock
+
+# Eliminar mocks uno por uno por ID numérico
+curl -X DELETE http://localhost:3000/api/configure-mock/1
+curl -X DELETE http://localhost:3000/api/configure-mock/2
+curl -X DELETE http://localhost:3000/api/configure-mock/3
+curl -X DELETE http://localhost:3000/api/configure-mock/4
+curl -X DELETE http://localhost:3000/api/configure-mock/5
+
+# Verificar que no quedan mocks
+curl -X GET http://localhost:3000/api/configure-mock
+
+# =====================================
+# NOTAS IMPORTANTES PARA LINUX/BASH:
+# =====================================
+# 
+# 1. Los comandos curl usan \ para continuación de línea en bash
+#    En Windows CMD usa ^ en lugar de \
+#    En PowerShell usa ` en lugar de \
+#
+# 2. Los datos JSON están encerrados en comillas simples ' ' 
+#    para evitar problemas con el escape de comillas dobles
+#
+# 3. Los IDs numéricos se incrementan secuencialmente (1, 2, 3...)
+#    Los UUIDs son generados automáticamente
+#
+# 4. Para eliminar por path, el path va directamente después de configure-mock/
+#    Ejemplo: /api/configure-mock/api/v1/ruta
+#    Esto se debe a cómo Express maneja las rutas con wildcard
+#
+# 5. Algunos comandos pueden fallar si ya existe el mock o si ya fue eliminado
+#    Esto es normal y forma parte de las pruebas
+#
+# 6. Para obtener UUIDs reales, ejecuta primero el comando de listar mocks
+#
+# 7. El servidor debe estar ejecutándose en http://localhost:3000
+#    Reinicia el servidor después de hacer cambios en el código
+#
+# 8. Para ejecutar múltiples comandos desde este archivo:
+#    bash -c "$(grep '^curl' pruebas_curl_linux.txt | head -5)"
+#
+# 9. Para guardar salidas en un archivo:
+#    curl ... | tee -a resultados_linux.txt
+#
+# =====================================
